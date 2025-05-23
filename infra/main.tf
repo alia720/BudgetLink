@@ -7,12 +7,11 @@ terraform {
   }
   
   backend "s3" {
-    # These values will be filled in by the user
-    # bucket         = "budgetlink-terraform-state"
-    # key            = "terraform.tfstate"
-    # region         = "us-east-1"
-    # dynamodb_table = "budgetlink-terraform-locks"
-    # encrypt        = true
+    bucket         = "budgetlink-terraform-state"
+    key            = "terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "budgetlink-terraform-locks"
+    encrypt        = true
   }
 }
 
@@ -41,10 +40,28 @@ variable "environment" {
   default     = "dev"
 }
 
+# Module declarations
+module "s3_frontend" {
+  source = "./modules/s3-frontend"
+  environment = var.environment
+}
+
+module "dynamodb" {
+  source = "./modules/dynamodb"
+  environment = var.environment
+}
+
+module "api_gateway_lambda" {
+  source = "./modules/api-gateway-lambda"
+  environment = var.environment
+  dynamodb_table_name = module.dynamodb.table_name
+  dynamodb_table_arn = module.dynamodb.table_arn
+}
+
 # Outputs
 output "api_gateway_url" {
   description = "URL of the API Gateway endpoint"
-  value       = module.api_gateway.api_url
+  value       = module.api_gateway_lambda.api_url
 }
 
 output "dynamodb_table_name" {
