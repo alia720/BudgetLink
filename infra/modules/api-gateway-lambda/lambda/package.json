@@ -1,0 +1,15 @@
+{
+  "name": "budgetlink-lambda",
+  "version": "1.0.0",
+  "description": "Lambda functions for BudgetLink",
+  "main": "src/budget.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.0.0",
+    "@aws-sdk/lib-dynamodb": "^3.0.0",
+    "bcryptjs": "^2.4.3",
+    "unique-names-generator": "^4.7.1"
+  }
+} 
