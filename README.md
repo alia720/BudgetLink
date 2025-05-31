@@ -1,6 +1,6 @@
 <div align="center">
 
-# BudgetLink 💰
+# BudgetLink (W.I.P)💰
 *The shareable budget builder you actually want to use*
 
 </div>
