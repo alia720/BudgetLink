@@ -22,7 +22,7 @@
 <details>
 <summary>📊 Architecture & Data Flow Diagram</summary>
 
-![Architecture/DataFlow Diagram](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Architecture+Diagram+Here)
+![Architecture/DataFlow Diagram](DataFlowDiagram.png)
 
 </details>
 
