@@ -60,11 +60,9 @@ No email verification, no password requirements, no premium tiers. Just open the
 ### Collaborative Tracking
 - **Multi-contributor**: Anyone with edit access can add expenses
 - **Change History**: See who added what and when
-- **Conflict Resolution**: Smart merging when multiple people edit simultaneously
 
 ### Intelligent Insights
 - **Visual Breakdown**: Interactive charts that actually help you understand your spending
-- **Trend Analysis**: Spot patterns before they become problems
 - **Smart Alerts**: Get notified when you're approaching limits (email or browser)
 
 ### Export Everything
