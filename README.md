@@ -22,7 +22,7 @@
 <details>
 <summary>📊 Architecture & Data Flow Diagram</summary>
 
-![Architecture/DataFlow Diagram](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Architecture+Diagram+Here)
+![Architecture/DataFlow Diagram](DataFlowDiagram.png)
 
 </details>
 
@@ -60,11 +60,9 @@ No email verification, no password requirements, no premium tiers. Just open the
 ### Collaborative Tracking
 - **Multi-contributor**: Anyone with edit access can add expenses
 - **Change History**: See who added what and when
-- **Conflict Resolution**: Smart merging when multiple people edit simultaneously
 
 ### Intelligent Insights
 - **Visual Breakdown**: Interactive charts that actually help you understand your spending
-- **Trend Analysis**: Spot patterns before they become problems
 - **Smart Alerts**: Get notified when you're approaching limits (email or browser)
 
 ### Export Everything
@@ -142,6 +140,6 @@ The answer is a tool that gets out of your way and lets you focus on what matter
 
 **Built with ❤️ by someone who hates complicated budgeting app**
 
-[MIT License](LICENSE) • [Changelog](CHANGELOG.md) • [Roadmap](ROADMAP.md)
+[MIT License](LICENSE)
 
 </div>
