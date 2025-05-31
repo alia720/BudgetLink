@@ -1,15 +1,33 @@
 {
-  "name": "budgetlink-lambda",
+  "name": "budgetlink-lambda-functions",
   "version": "1.0.0",
-  "description": "Lambda functions for BudgetLink",
-  "main": "src/budget.js",
+  "description": "Lambda functions for BudgetLink application",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "lint": "eslint src/",
+    "build": "zip -r budget.zip src/ node_modules/ package.json",
+    "deploy": "npm run build && aws s3 cp budget.zip s3://your-lambda-code-bucket/"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.0.0",
-    "@aws-sdk/lib-dynamodb": "^3.0.0",
+    "@aws-sdk/client-dynamodb": "^3.470.0",
+    "@aws-sdk/lib-dynamodb": "^3.470.0",
     "bcryptjs": "^2.4.3",
     "unique-names-generator": "^4.7.1"
-  }
-} 
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "eslint": "^8.55.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "aws",
+    "lambda",
+    "budgeting",
+    "expense-tracking"
+  ],
+  "author": "BudgetLink Team",
+  "license": "MIT"
+}

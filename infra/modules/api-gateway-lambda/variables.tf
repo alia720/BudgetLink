@@ -11,4 +11,10 @@ variable "dynamodb_table_name" {
 variable "dynamodb_table_arn" {
   description = "ARN of the DynamoDB table"
   type        = string
+}
+
+variable "frontend_url" {
+  description = "Frontend URL for generating share links"
+  type        = string
+  default     = null
 } 
