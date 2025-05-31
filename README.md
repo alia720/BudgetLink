@@ -1,94 +1,147 @@
-# BudgetLink (W.I.P)💰
+<div align="center">
 
-[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
-[![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
-[![DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?style=for-the-badge&logo=amazon-dynamodb&logoColor=white)](https://aws.amazon.com/dynamodb/)
-[![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)](https://www.terraform.io/)
-[![AWS Lambda](https://img.shields.io/badge/AWS_Lambda-FF9900?style=for-the-badge&logo=aws-lambda&logoColor=white)](https://aws.amazon.com/lambda/)
-[![Amazon S3](https://img.shields.io/badge/Amazon_S3-569A31?style=for-the-badge&logo=amazon-s3&logoColor=white)](https://aws.amazon.com/s3/)
+# BudgetLink 💰
+*The shareable budget builder you actually want to use*
 
-A modern, shareable budgeting and expense tracking web application that lets you create and share budgets without requiring user accounts. Think of it as "PCPartPicker for budgets" - create a budget, get a shareable link, and collaborate with others!
+</div>
 
-## ✨ Features
+<div align="center">
 
-### 🔐 Secure & Shareable Budgets
-- Generate human-readable budget URLs (e.g., `budgetlink.com/happy-blue-tiger`)
-- Optional password protection for sensitive budgets
-- View-only access tokens for sharing with stakeholders
-- No account required - just create and share!
+![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
+![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat&logo=amazon-aws&logoColor=white)
+![DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?style=flat&logo=amazon-dynamodb&logoColor=white)
+![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=flat&logo=terraform&logoColor=white)
+![Lambda](https://img.shields.io/badge/Lambda-FF9900?style=flat&logo=aws-lambda&logoColor=white)
+![S3](https://img.shields.io/badge/S3-569A31?style=flat&logo=amazon-s3&logoColor=white)
 
-### 💸 Expense Management
-- Add one-time or recurring expenses
-- Dynamic category creation
-- Real-time budget tracking
-- Smart expense categorization
+**Create → Share → Track → Repeat**
 
-### 📊 Visual Analytics
-- Interactive charts and graphs
-- Budget vs. actual spending comparisons
-- Category-wise expense breakdown
-- Cash flow projections
-- Threshold alerts (email/browser notifications)
+[Demo](https://budgetlink.com/demo) • [Docs](https://docs.budgetlink.com) • [Feedback](https://github.com/username/budgetlink/issues)
 
-### 📤 Export & Reports
-- Download transactions in multiple formats
-  - PDF reports
-  - CSV exports
-  - Excel spreadsheets
-- Customizable report templates
-- Summary dashboards
+</div>
+<details>
+<summary>📊 Architecture & Data Flow Diagram</summary>
 
-## 🛠 Tech Stack
+![Architecture/DataFlow Diagram](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Architecture+Diagram+Here)
 
-### Frontend
-- React with TypeScript
-- Recharts/Chart.js for visualizations
-- Modern UI components
-- Responsive design
+</details>
 
-### Backend (AWS Serverless)
-- API Gateway for RESTful endpoints
-- Lambda functions for business logic
-- DynamoDB (single-table design)
-- S3 for static assets
+---
 
-## 🚀 Getting Started
+## The Problem I'm Solving
 
-### Prerequisites
-- Node.js (v18 or higher)
-- AWS CLI configured
-- Terraform for infrastructure
+Building budgets with friends, family, or roommates shouldn't require everyone to sign up for Yet Another App™. BudgetLink works like PCPartPicker but for money - create a budget, get a memorable link like `budgetlink.com/sunny-red-panda`, and share it with anyone.
 
-### Frontend Setup
+**No accounts. No friction. Just budgets that work.**
+
+## What Makes This Different
+
+**🔗 Shareable by Design**  
+Every budget gets a human-readable URL. Share it in Slack, text it to your roommate, or bookmark it for later.
+
+**🛡️ Privacy When You Need It**  
+Add password protection for sensitive budgets, or create view-only tokens for stakeholders who need to see but not edit.
+
+**⚡ Built for Speed**  
+Serverless architecture means your budgets load instantly and scale automatically. No more waiting for "the app to catch up."
+
+**🎯 Zero Barrier to Entry**  
+No email verification, no password requirements, no premium tiers. Just open the site and start budgeting.
+
+---
+
+## Core Features
+
+### Smart Budget Creation
+- **Dynamic Categories**: Add expenses and watch categories emerge naturally
+- **Recurring Logic**: Set up monthly rent once, forget about it forever  
+- **Real-time Sync**: Changes appear instantly across all shared links
+
+### Collaborative Tracking
+- **Multi-contributor**: Anyone with edit access can add expenses
+- **Change History**: See who added what and when
+- **Conflict Resolution**: Smart merging when multiple people edit simultaneously
+
+### Intelligent Insights
+- **Visual Breakdown**: Interactive charts that actually help you understand your spending
+- **Trend Analysis**: Spot patterns before they become problems
+- **Smart Alerts**: Get notified when you're approaching limits (email or browser)
+
+### Export Everything
+Choose your format: PDF reports, CSV data, or Excel spreadsheets. Your budget, your way.
+
+---
+
+## Tech Philosophy
+
+I built BudgetLink on AWS serverless because your budget shouldn't go down when you need it most. Here's what powers the magic:
+
+**Frontend**: React + TypeScript for a snappy, type-safe experience  
+**API Layer**: AWS API Gateway handling millions of requests effortlessly  
+**Logic**: Lambda functions that wake up only when needed  
+**Storage**: DynamoDB with single-table design for sub-10ms queries  
+**Assets**: S3 + CloudFront for global content delivery
+
+**Infrastructure as Code**: Everything deployed via Terraform for reproducible, version-controlled infrastructure.
+
+---
+
+## Quick Start
+
+**Want to try it?** Just visit [budgetlink.com](https://budgetlink.com) and start building.
+
+**Want to run it locally?**
+
 ```bash
-cd frontend
-npm install
-npm run dev
+# Frontend
+cd frontend && npm install && npm run dev
+
+# Infrastructure  
+cd infra && terraform init && terraform apply
 ```
 
-### Backend Setup
-```bash
-cd infra
-terraform init
-terraform apply
-```
+**Requirements**: Node.js 18+, AWS CLI configured, Terraform installed.
 
-## 📝 Project Structure
+---
+
+## Project Structure
+
 ```
 BudgetLink/
-├── frontend/          # React frontend application
-├── infra/            # Terraform infrastructure code
-│   └── modules/      # Reusable Terraform modules
-└── README.md
+├── frontend/           # React app with TypeScript
+│   ├── src/components/ # Reusable UI components
+│   ├── src/hooks/      # Custom React hooks
+│   └── src/utils/      # Helper functions
+├── infra/             # Terraform infrastructure
+│   ├── modules/       # Reusable Terraform modules
+│   └── environments/  # Environment-specific configs
+└── docs/              # Documentation and guides
 ```
 
-## 🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
+---
 
-## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Contributing
 
-## 🙏 Acknowledgments
-- Inspired by PCPartPicker's shareable build system
-- Built with modern web technologies
-- Powered by AWS serverless architecture 
+Found a bug? Have an idea? I'd love your help.
+
+**Quick contributions**: Fix typos, improve docs, add examples  
+**Feature requests**: Open an issue with your use case  
+**Major changes**: Let's chat in Discussions first
+
+---
+
+## Inspiration
+
+BudgetLink was born from frustration with existing budgeting apps that require everyone to create accounts just to split a grocery bill. I asked: "What if budgeting worked more like sharing a Google Doc or a PcPartPicker link?"
+
+The answer is a tool that gets out of your way and lets you focus on what matters: understanding and controlling your money.
+
+---
+
+<div align="center">
+
+**Built with ❤️ by someone who hates complicated budgeting app**
+
+[MIT License](LICENSE) • [Changelog](CHANGELOG.md) • [Roadmap](ROADMAP.md)
+
+</div>
