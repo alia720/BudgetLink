@@ -140,6 +140,6 @@ The answer is a tool that gets out of your way and lets you focus on what matter
 
 **Built with ❤️ by someone who hates complicated budgeting app**
 
-[MIT License](LICENSE) • [Changelog](CHANGELOG.md) • [Roadmap](ROADMAP.md)
+[MIT License](LICENSE)
 
 </div>
