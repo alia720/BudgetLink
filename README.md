@@ -86,7 +86,7 @@ I built BudgetLink on AWS serverless because your budget shouldn't go down when 
 
 ## Quick Start
 
-**Want to try it?** Just visit [budgetlink.com](https://budgetlink.com) and start building.
+**Want to try it?** Just visit [budgetlink.###](https://budgetlink.###) and start building.
 
 **Want to run it locally?**
 
