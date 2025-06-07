@@ -20,7 +20,7 @@
 
 </div>
 <details>
-<summary>📊 Architecture & Data Flow Diagram</summary>
+<summary>Architecture & Data Flow Diagram</summary>
 
 ![Architecture/DataFlow Diagram](DataFlowDiagram.png)
 
@@ -36,16 +36,16 @@ Building budgets with friends, family, or roommates shouldn't require everyone t
 
 ## What Makes This Different
 
-**🔗 Shareable by Design**  
+**Shareable by Design**  
 Every budget gets a human-readable URL. Share it in Slack, text it to your roommate, or bookmark it for later.
 
-**🛡️ Privacy When You Need It**  
+**Privacy When You Need It**  
 Add password protection for sensitive budgets, or create view-only tokens for stakeholders who need to see but not edit.
 
-**⚡ Built for Speed**  
+**Built for Speed**  
 Serverless architecture means your budgets load instantly and scale automatically. No more waiting for "the app to catch up."
 
-**🎯 Zero Barrier to Entry**  
+**Zero Barrier to Entry**  
 No email verification, no password requirements, no premium tiers. Just open the site and start budgeting.
 
 ---
@@ -70,7 +70,7 @@ Choose your format: PDF reports, CSV data, or Excel spreadsheets. Your budget, y
 
 ---
 
-## Tech Philosophy
+## Tech framework
 
 I built BudgetLink on AWS serverless because your budget shouldn't go down when you need it most. Here's what powers the magic:
 
@@ -137,8 +137,6 @@ The answer is a tool that gets out of your way and lets you focus on what matter
 ---
 
 <div align="center">
-
-**Built with ❤️ by someone who hates complicated budgeting app**
 
 [MIT License](LICENSE)
 
