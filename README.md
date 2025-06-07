@@ -126,15 +126,6 @@ Found a bug? Have an idea? I'd love your help.
 **Feature requests**: Open an issue with your use case  
 **Major changes**: Let's chat in Discussions first
 
----
-
-## Inspiration
-
-BudgetLink was born from frustration with existing budgeting apps that require everyone to create accounts just to split a grocery bill. I asked: "What if budgeting worked more like sharing a Google Doc or a PcPartPicker link?"
-
-The answer is a tool that gets out of your way and lets you focus on what matters: understanding and controlling your money.
-
----
 
 <div align="center">
 
