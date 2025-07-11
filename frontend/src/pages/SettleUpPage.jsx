@@ -164,7 +164,7 @@ export const SettleUpPage = () => {
                                         <div className="flex items-center gap-3">
                                             <span className="font-bold font-mono text-green-700 dark:text-green-300">{formatCurrency(t.amount)}</span>
                                             <button onClick={() => handleMarkAsPaid(t)} className="px-3 py-1 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-                                                Pay
+                                                Paid?
                                             </button>
                                         </div>
                                     </div>
