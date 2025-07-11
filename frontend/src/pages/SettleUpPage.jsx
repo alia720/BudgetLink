@@ -11,7 +11,7 @@ export const SettleUpPage = () => {
         { id: 2, description: 'Dinner', paidBy: 'Bob', amount: 85.00, splitBetween: 3 },
         { id: 3, description: 'Gas', paidBy: 'Alice', amount: 55.00, splitBetween: 2 },
     ]);
-    const [newExpense, setNewExpense] = useState({ description: '', paidBy: participants[0], amount: '', splitBetween: participants.length });
+    const [newExpense, setNewExpense] = useState({ description: '', paidBy: participants[0] || '', amount: '', splitBetween: participants.length });
 
     const settlement = useMemo(() => {
         if (participants.length === 0) return { totalExpenses: 0, transactions: [] };
@@ -19,13 +19,18 @@ export const SettleUpPage = () => {
         const balances = participants.reduce((acc, person) => ({ ...acc, [person]: 0 }), {});
 
         expenses.forEach(expense => {
+            const share = expense.amount / expense.splitBetween;
+            
+            // The person who paid gets the full amount credited to their balance
             if (balances[expense.paidBy] !== undefined) {
                 balances[expense.paidBy] += expense.amount;
             }
-            const share = expense.amount / expense.splitBetween;
-
+            
+            // The share is debited from every participant's balance
             participants.forEach(p => {
-                balances[p] -= share;
+                if (balances[p] !== undefined) {
+                    balances[p] -= share;
+                }
             });
         });
 
@@ -62,14 +67,19 @@ export const SettleUpPage = () => {
     const handleAddParticipant = (e) => {
         e.preventDefault();
         if (newParticipant && !participants.includes(newParticipant)) {
-            setParticipants(prev => [...prev, newParticipant]);
+            const newParts = [...participants, newParticipant];
+            setParticipants(newParts);
             setNewParticipant('');
+            // If this is the first participant, set them as the default payer
+            if (participants.length === 0) {
+                setNewExpense(p => ({ ...p, paidBy: newParticipant }));
+            }
         }
     };
 
     const handleAddExpense = (e) => {
         e.preventDefault();
-        if (newExpense.description && newExpense.amount && newExpense.paidBy) {
+        if (newExpense.description && newExpense.amount && newExpense.paidBy && participants.length > 0) {
             setExpenses(prev => [...prev, { ...newExpense, id: crypto.randomUUID(), amount: parseFloat(newExpense.amount), splitBetween: parseInt(newExpense.splitBetween, 10) || participants.length }]);
             setNewExpense({ description: '', paidBy: participants[0], amount: '', splitBetween: participants.length });
         }
@@ -99,7 +109,7 @@ export const SettleUpPage = () => {
                             ))}
                         </div>
                         <form onSubmit={handleAddParticipant} className="flex gap-2">
-                            <input type="text" value={newParticipant} onChange={(e) => setNewParticipant(e.target.value)} placeholder="Add new name..." className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800" />
+                            <input type="text" value={newParticipant} onChange={(e) => setNewParticipant(e.target.value)} placeholder="Add new name..." className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
                             <button type="submit" className="bg-blue-600 text-white p-2.5 rounded-md hover:bg-blue-700"><UserPlus size={20} /></button>
                         </form>
                     </div>
@@ -108,16 +118,16 @@ export const SettleUpPage = () => {
                     <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-100 dark:border-slate-700">
                         <h2 className="text-2xl font-semibold text-slate-800 dark:text-white mb-4">Add Expense</h2>
                         <form onSubmit={handleAddExpense} className="space-y-4">
-                            <input type="text" value={newExpense.description} onChange={(e) => setNewExpense(p => ({...p, description: e.target.value}))} placeholder="Expense description" className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800" required />
+                            <input type="text" value={newExpense.description} onChange={(e) => setNewExpense(p => ({...p, description: e.target.value}))} placeholder="Expense description" className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white" required />
                             <div className="grid grid-cols-2 gap-4">
-                                <input type="number" value={newExpense.amount} onChange={(e) => setNewExpense(p => ({...p, amount: e.target.value}))} placeholder="Amount ($)" className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800" required />
-                                <select value={newExpense.paidBy} onChange={(e) => setNewExpense(p => ({...p, paidBy: e.target.value}))} className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800">
+                                <input type="number" value={newExpense.amount} onChange={(e) => setNewExpense(p => ({...p, amount: e.target.value}))} placeholder="Amount ($)" className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white" required />
+                                <select value={newExpense.paidBy} onChange={(e) => setNewExpense(p => ({...p, paidBy: e.target.value}))} className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white" disabled={participants.length === 0}>
                                     {participants.map(p => <option key={p} value={p}>{p} paid</option>)}
                                 </select>
                             </div>
                              <div className="grid grid-cols-2 gap-4">
-                                <input type="number" value={newExpense.splitBetween} onChange={(e) => setNewExpense(p => ({...p, splitBetween: e.target.value}))} placeholder={`Split between ${participants.length}`} className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800" required />
-                                <button type="submit" className="w-full bg-green-600 text-white p-2.5 rounded-md hover:bg-green-700 flex items-center justify-center gap-2"><Plus size={20} /> Add</button>
+                                <input type="number" value={newExpense.splitBetween} onChange={(e) => setNewExpense(p => ({...p, splitBetween: e.target.value}))} placeholder={`Split between ${participants.length}`} className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white" required />
+                                <button type="submit" className="w-full bg-green-600 text-white p-2.5 rounded-md hover:bg-green-700 flex items-center justify-center gap-2 disabled:opacity-50" disabled={participants.length === 0}><Plus size={20} /> Add</button>
                             </div>
                         </form>
                     </div>
