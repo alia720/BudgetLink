@@ -1,8 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { ArrowRight, Plus, Trash2, UserPlus, Users, Handshake } from 'lucide-react';
-import { formatCurrency } from '../utils/formatCurrency';
+import { Plus, Trash2, UserPlus, Users, ArrowRight as ArrowRightIcon } from 'lucide-react';
+import { useAppContext } from '../context/AppContext'; // This line was missing
+import { formatCurrency } from '../utils/formatCurrency'; // This line was missing
 
 export const SettleUpPage = () => {
+    const { addEvent } = useAppContext();
     const [participants, setParticipants] = useState(['Alice', 'Bob', 'Charlie']);
     const [newParticipant, setNewParticipant] = useState('');
     
@@ -15,15 +17,12 @@ export const SettleUpPage = () => {
     
     const [settlementTransactions, setSettlementTransactions] = useState([]);
 
-    // This effect recalculates the settlement plan whenever expenses or participants change.
     useEffect(() => {
         if (participants.length === 0) {
             setSettlementTransactions([]);
             return;
         }
-
         const balances = participants.reduce((acc, person) => ({ ...acc, [person]: 0 }), {});
-
         expenses.forEach(expense => {
             const share = expense.amount / expense.splitBetween;
             if (balances[expense.paidBy] !== undefined) {
@@ -35,31 +34,25 @@ export const SettleUpPage = () => {
                 }
             });
         });
-
         const debtors = [];
         const creditors = [];
         for (const person in balances) {
             if (balances[person] < 0) debtors.push({ name: person, amount: -balances[person] });
             else if (balances[person] > 0) creditors.push({ name: person, amount: balances[person] });
         }
-
         debtors.sort((a, b) => a.amount - b.amount);
         creditors.sort((a, b) => a.amount - b.amount);
-
         const transactions = [];
         while (debtors.length > 0 && creditors.length > 0) {
             const debtor = debtors[0];
             const creditor = creditors[0];
             const amount = Math.min(debtor.amount, creditor.amount);
-
             transactions.push({ id: crypto.randomUUID(), from: debtor.name, to: creditor.name, amount });
             debtor.amount -= amount;
             creditor.amount -= amount;
-
             if (debtor.amount < 0.01) debtors.shift();
             if (creditor.amount < 0.01) creditors.shift();
         }
-        
         setSettlementTransactions(transactions);
     }, [expenses, participants]);
 
@@ -70,6 +63,7 @@ export const SettleUpPage = () => {
         if (newParticipant && !participants.includes(newParticipant)) {
             const newParts = [...participants, newParticipant];
             setParticipants(newParts);
+            addEvent({ type: 'PARTICIPANT_ADD', user: 'Admin', description: `added participant '${newParticipant}'` });
             setNewParticipant('');
             if (participants.length === 0) {
                 setNewExpense(p => ({ ...p, paidBy: newParticipant }));
@@ -80,19 +74,18 @@ export const SettleUpPage = () => {
     const handleAddExpense = (e) => {
         e.preventDefault();
         if (newExpense.description && newExpense.amount && newExpense.paidBy && participants.length > 0) {
-            setExpenses(prev => [...prev, { ...newExpense, id: crypto.randomUUID(), amount: parseFloat(newExpense.amount), splitBetween: parseInt(newExpense.splitBetween, 10) || participants.length }]);
+            const expenseToAdd = { ...newExpense, id: crypto.randomUUID(), amount: parseFloat(newExpense.amount), splitBetween: parseInt(newExpense.splitBetween, 10) || participants.length };
+            setExpenses(prev => [...prev, expenseToAdd]);
+            addEvent({ type: 'EXPENSE_ADD', user: newExpense.paidBy, description: `added '${newExpense.description}'`, amount: expenseToAdd.amount });
             setNewExpense({ description: '', paidBy: participants[0], amount: '', splitBetween: participants.length });
         }
     };
 
-    const handleMarkAsPaid = (transactionId) => {
-        // In real app, send this to backend to log the event.
-        // Here, we'll just remove it from the list to simulate payment.
-        console.log("Marking transaction as paid:", transactionId);
+    const handleMarkAsPaid = (transaction) => {
+        addEvent({ type: 'SETTLEMENT', user: transaction.from, description: `paid ${transaction.to}`, amount: transaction.amount });
         setSettlementTransactions(currentTransactions => 
-            currentTransactions.filter(t => t.id !== transactionId)
+            currentTransactions.filter(t => t.id !== transaction.id)
         );
-        // also add a new entry to global eventLog state here.
     };
 
     return (
@@ -101,11 +94,8 @@ export const SettleUpPage = () => {
                 <h1 className="text-4xl font-bold text-slate-900 dark:text-white">Settle Up</h1>
                 <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">Add participants and expenses to calculate who owes who.</p>
             </header>
-
             <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Left Side: Inputs */}
                 <div className="space-y-8">
-                    {/* Participants Input and Expense Input... (code is unchanged) */}
                     <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-100 dark:border-slate-700">
                         <h2 className="text-2xl font-semibold text-slate-800 dark:text-white mb-4 flex items-center gap-2"><Users size={24} /> Participants</h2>
                         <div className="flex flex-wrap gap-2 mb-4">
@@ -140,10 +130,7 @@ export const SettleUpPage = () => {
                         </form>
                     </div>
                 </div>
-
-                {/* Right Side: Results */}
                 <div className="space-y-8">
-                     {/* Expense List */}
                     <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-100 dark:border-slate-700">
                         <h2 className="text-2xl font-semibold text-slate-800 dark:text-white mb-4">Expense Log</h2>
                         <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
@@ -159,7 +146,6 @@ export const SettleUpPage = () => {
                              {expenses.length === 0 && <p className="text-center text-slate-500 dark:text-slate-400 py-8">No expenses added yet.</p>}
                         </div>
                     </div>
-                    {/* Settlement Plan */}
                     <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-100 dark:border-slate-700">
                         <h2 className="text-2xl font-semibold text-slate-800 dark:text-white mb-4">Settlement Plan</h2>
                         <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg mb-6 text-center">
@@ -172,13 +158,13 @@ export const SettleUpPage = () => {
                                     <div key={t.id} className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/30 rounded-lg">
                                         <div className="flex items-center gap-3">
                                             <span className="font-semibold text-green-800 dark:text-green-300">{t.from}</span>
-                                            <ArrowRight size={16} className="text-green-600 dark:text-green-400" />
+                                            <ArrowRightIcon size={16} className="text-green-600 dark:text-green-400" />
                                             <span className="font-semibold text-green-800 dark:text-green-300">{t.to}</span>
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <span className="font-bold font-mono text-green-700 dark:text-green-300">{formatCurrency(t.amount)}</span>
-                                            <button onClick={() => handleMarkAsPaid(t.id)} className="px-3 py-1 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-                                                Paid?
+                                            <button onClick={() => handleMarkAsPaid(t)} className="px-3 py-1 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                                                Pay
                                             </button>
                                         </div>
                                     </div>

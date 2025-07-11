@@ -1,16 +1,7 @@
 import React from 'react';
 import { PlusCircle, Trash2, UserPlus, Handshake, ArrowRight } from 'lucide-react';
-import { formatCurrency } from '../utils/formatCurrency';
-
-// Mock data representing a history of all actions
-const eventLog = [
-    { id: 1, type: 'PARTICIPANT_ADD', user: 'Alice', description: "created the budget and added Bob and Charlie.", timestamp: '2025-07-10 09:00 AM' },
-    { id: 2, type: 'EXPENSE_ADD', user: 'Alice', description: "added 'Groceries'", amount: 120.50, timestamp: '2025-07-10 10:30 AM' },
-    { id: 3, type: 'EXPENSE_ADD', user: 'Bob', description: "added 'Dinner'", amount: 85.00, timestamp: '2025-07-10 07:15 PM' },
-    { id: 4, type: 'EXPENSE_ADD', user: 'Alice', description: "added 'Gas'", amount: 55.00, timestamp: '2025-07-11 08:00 AM' },
-    { id: 5, type: 'EXPENSE_DELETE', user: 'Charlie', description: "deleted 'Movie Tickets'", amount: 45.00, timestamp: '2025-07-11 11:45 AM' },
-    { id: 6, type: 'SETTLEMENT', user: 'Bob', description: "paid Alice", amount: 17.50, timestamp: '2025-07-12 01:20 PM' },
-];
+import { useAppContext } from '../context/AppContext';
+import { formatCurrency } from '../utils/formatCurrency'; // This line was missing
 
 const EventIcon = ({ type }) => {
     switch(type) {
@@ -23,6 +14,8 @@ const EventIcon = ({ type }) => {
 };
 
 export const TransactionsPage = () => {
+    const { eventLog } = useAppContext(); // Use shared state
+
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <header className="text-center mb-12">
@@ -57,6 +50,7 @@ export const TransactionsPage = () => {
                             </div>
                         </div>
                     ))}
+                    {eventLog.length === 0 && <p className="text-center text-slate-500 dark:text-slate-400 py-8">No history yet.</p>}
                 </div>
             </div>
         </div>

@@ -1,14 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Hero } from '../components/Hero';
 import { Features } from '../components/Features';
-import { BudgetCreator } from '../components/BudgetCreator';
 
-export const DashboardPage = () => {
+export const DashboardPage = ({ handleCreateBudget }) => {
     return (
         <>
-            <Hero />
+            <Hero handleCreateBudget={handleCreateBudget} />
             <Features />
-            <BudgetCreator />
         </>
     );
+};
+DashboardPage.propTypes = {
+    handleCreateBudget: PropTypes.func.isRequired,
 };
