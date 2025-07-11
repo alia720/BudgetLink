@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { ArrowRight, Plus, Trash2, UserPlus, Users } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { ArrowRight, Plus, Trash2, UserPlus, Users, Handshake } from 'lucide-react';
 import { formatCurrency } from '../utils/formatCurrency';
 
 export const SettleUpPage = () => {
@@ -12,21 +12,23 @@ export const SettleUpPage = () => {
         { id: 3, description: 'Gas', paidBy: 'Alice', amount: 55.00, splitBetween: 2 },
     ]);
     const [newExpense, setNewExpense] = useState({ description: '', paidBy: participants[0] || '', amount: '', splitBetween: participants.length });
+    
+    const [settlementTransactions, setSettlementTransactions] = useState([]);
 
-    const settlement = useMemo(() => {
-        if (participants.length === 0) return { totalExpenses: 0, transactions: [] };
+    // This effect recalculates the settlement plan whenever expenses or participants change.
+    useEffect(() => {
+        if (participants.length === 0) {
+            setSettlementTransactions([]);
+            return;
+        }
 
         const balances = participants.reduce((acc, person) => ({ ...acc, [person]: 0 }), {});
 
         expenses.forEach(expense => {
             const share = expense.amount / expense.splitBetween;
-            
-            // The person who paid gets the full amount credited to their balance
             if (balances[expense.paidBy] !== undefined) {
                 balances[expense.paidBy] += expense.amount;
             }
-            
-            // The share is debited from every participant's balance
             participants.forEach(p => {
                 if (balances[p] !== undefined) {
                     balances[p] -= share;
@@ -36,7 +38,6 @@ export const SettleUpPage = () => {
 
         const debtors = [];
         const creditors = [];
-
         for (const person in balances) {
             if (balances[person] < 0) debtors.push({ name: person, amount: -balances[person] });
             else if (balances[person] > 0) creditors.push({ name: person, amount: balances[person] });
@@ -51,7 +52,7 @@ export const SettleUpPage = () => {
             const creditor = creditors[0];
             const amount = Math.min(debtor.amount, creditor.amount);
 
-            transactions.push({ from: debtor.name, to: creditor.name, amount });
+            transactions.push({ id: crypto.randomUUID(), from: debtor.name, to: creditor.name, amount });
             debtor.amount -= amount;
             creditor.amount -= amount;
 
@@ -59,10 +60,10 @@ export const SettleUpPage = () => {
             if (creditor.amount < 0.01) creditors.shift();
         }
         
-        const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
-
-        return { totalExpenses, transactions };
+        setSettlementTransactions(transactions);
     }, [expenses, participants]);
+
+    const totalExpenses = useMemo(() => expenses.reduce((sum, e) => sum + e.amount, 0), [expenses]);
 
     const handleAddParticipant = (e) => {
         e.preventDefault();
@@ -70,7 +71,6 @@ export const SettleUpPage = () => {
             const newParts = [...participants, newParticipant];
             setParticipants(newParts);
             setNewParticipant('');
-            // If this is the first participant, set them as the default payer
             if (participants.length === 0) {
                 setNewExpense(p => ({ ...p, paidBy: newParticipant }));
             }
@@ -85,6 +85,16 @@ export const SettleUpPage = () => {
         }
     };
 
+    const handleMarkAsPaid = (transactionId) => {
+        // In real app, send this to backend to log the event.
+        // Here, we'll just remove it from the list to simulate payment.
+        console.log("Marking transaction as paid:", transactionId);
+        setSettlementTransactions(currentTransactions => 
+            currentTransactions.filter(t => t.id !== transactionId)
+        );
+        // also add a new entry to global eventLog state here.
+    };
+
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <header className="text-center mb-12">
@@ -95,7 +105,7 @@ export const SettleUpPage = () => {
             <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Left Side: Inputs */}
                 <div className="space-y-8">
-                    {/* Participants Input */}
+                    {/* Participants Input and Expense Input... (code is unchanged) */}
                     <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-100 dark:border-slate-700">
                         <h2 className="text-2xl font-semibold text-slate-800 dark:text-white mb-4 flex items-center gap-2"><Users size={24} /> Participants</h2>
                         <div className="flex flex-wrap gap-2 mb-4">
@@ -113,8 +123,6 @@ export const SettleUpPage = () => {
                             <button type="submit" className="bg-blue-600 text-white p-2.5 rounded-md hover:bg-blue-700"><UserPlus size={20} /></button>
                         </form>
                     </div>
-
-                    {/* Expenses Input */}
                     <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-100 dark:border-slate-700">
                         <h2 className="text-2xl font-semibold text-slate-800 dark:text-white mb-4">Add Expense</h2>
                         <form onSubmit={handleAddExpense} className="space-y-4">
@@ -155,20 +163,24 @@ export const SettleUpPage = () => {
                     <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-100 dark:border-slate-700">
                         <h2 className="text-2xl font-semibold text-slate-800 dark:text-white mb-4">Settlement Plan</h2>
                         <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg mb-6 text-center">
-                            <p className="text-sm text-blue-800 dark:text-blue-300">Total Spent: <span className="font-bold">{formatCurrency(settlement.totalExpenses)}</span></p>
+                            <p className="text-sm text-blue-800 dark:text-blue-300">Total Spent: <span className="font-bold">{formatCurrency(totalExpenses)}</span></p>
                         </div>
                         <div className="space-y-4">
                             <h3 className="font-semibold text-slate-600 dark:text-slate-300">Payments to Settle Up:</h3>
-                            {settlement.transactions.length > 0 ? (
-                                settlement.transactions.map((t, i) => (
-                                    <div key={i} className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/30 rounded-lg">
-                                        <span className="font-semibold text-green-800 dark:text-green-300">{t.from}</span>
-                                        <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
-                                            <ArrowRight size={18} />
-                                            <span className="font-bold">{formatCurrency(t.amount)}</span>
-                                            <ArrowRight size={18} />
+                            {settlementTransactions.length > 0 ? (
+                                settlementTransactions.map((t) => (
+                                    <div key={t.id} className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/30 rounded-lg">
+                                        <div className="flex items-center gap-3">
+                                            <span className="font-semibold text-green-800 dark:text-green-300">{t.from}</span>
+                                            <ArrowRight size={16} className="text-green-600 dark:text-green-400" />
+                                            <span className="font-semibold text-green-800 dark:text-green-300">{t.to}</span>
                                         </div>
-                                        <span className="font-semibold text-green-800 dark:text-green-300">{t.to}</span>
+                                        <div className="flex items-center gap-3">
+                                            <span className="font-bold font-mono text-green-700 dark:text-green-300">{formatCurrency(t.amount)}</span>
+                                            <button onClick={() => handleMarkAsPaid(t.id)} className="px-3 py-1 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                                                Paid?
+                                            </button>
+                                        </div>
                                     </div>
                                 ))
                             ) : (
