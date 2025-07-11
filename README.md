@@ -34,7 +34,7 @@ Building budgets with friends, family, or roommates shouldn't require everyone t
 
 **No accounts. No friction. Just budgets that work.**
 
-## What Makes This Different
+## What Makes This Different?
 
 **Shareable by Design**  
 Every budget gets a human-readable URL. Share it in Slack, text it to your roommate, or bookmark it for later.
@@ -74,7 +74,7 @@ Choose your format: PDF reports, CSV data, or Excel spreadsheets. Your budget, y
 
 I built BudgetLink on AWS serverless because your budget shouldn't go down when you need it most. Here's what powers the magic:
 
-**Frontend**: React + Javascript for a snappy, type-safe experience  
+**Frontend**: React + Javascript for a snappy, safe experience  
 **API Layer**: AWS API Gateway handling millions of requests effortlessly  
 **Logic**: Lambda functions that wake up only when needed  
 **Storage**: DynamoDB with single-table design for sub-10ms queries  
