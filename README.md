@@ -20,7 +20,7 @@
 
 </div>
 <details>
-<summary>📊 Architecture & Data Flow Diagram</summary>
+<summary>Architecture & Data Flow Diagram</summary>
 
 ![Architecture/DataFlow Diagram](DataFlowDiagram.png)
 
@@ -36,16 +36,16 @@ Building budgets with friends, family, or roommates shouldn't require everyone t
 
 ## What Makes This Different
 
-**🔗 Shareable by Design**  
+**Shareable by Design**  
 Every budget gets a human-readable URL. Share it in Slack, text it to your roommate, or bookmark it for later.
 
-**🛡️ Privacy When You Need It**  
+**Privacy When You Need It**  
 Add password protection for sensitive budgets, or create view-only tokens for stakeholders who need to see but not edit.
 
-**⚡ Built for Speed**  
+**Built for Speed**  
 Serverless architecture means your budgets load instantly and scale automatically. No more waiting for "the app to catch up."
 
-**🎯 Zero Barrier to Entry**  
+**Zero Barrier to Entry**  
 No email verification, no password requirements, no premium tiers. Just open the site and start budgeting.
 
 ---
@@ -70,11 +70,11 @@ Choose your format: PDF reports, CSV data, or Excel spreadsheets. Your budget, y
 
 ---
 
-## Tech Philosophy
+## Tech framework
 
 I built BudgetLink on AWS serverless because your budget shouldn't go down when you need it most. Here's what powers the magic:
 
-**Frontend**: React + TypeScript for a snappy, type-safe experience  
+**Frontend**: React + Javascript for a snappy, type-safe experience  
 **API Layer**: AWS API Gateway handling millions of requests effortlessly  
 **Logic**: Lambda functions that wake up only when needed  
 **Storage**: DynamoDB with single-table design for sub-10ms queries  
@@ -86,7 +86,7 @@ I built BudgetLink on AWS serverless because your budget shouldn't go down when 
 
 ## Quick Start
 
-**Want to try it?** Just visit [budgetlink.com](https://budgetlink.com) and start building.
+**Want to try it?** Just visit [budgetlink.###](https://budgetlink.###) and start building.
 
 **Want to run it locally?**
 
@@ -106,7 +106,7 @@ cd infra && terraform init && terraform apply
 
 ```
 BudgetLink/
-├── frontend/           # React app with TypeScript
+├── frontend/           # React app with Javascript
 │   ├── src/components/ # Reusable UI components
 │   ├── src/hooks/      # Custom React hooks
 │   └── src/utils/      # Helper functions
@@ -126,19 +126,8 @@ Found a bug? Have an idea? I'd love your help.
 **Feature requests**: Open an issue with your use case  
 **Major changes**: Let's chat in Discussions first
 
----
-
-## Inspiration
-
-BudgetLink was born from frustration with existing budgeting apps that require everyone to create accounts just to split a grocery bill. I asked: "What if budgeting worked more like sharing a Google Doc or a PcPartPicker link?"
-
-The answer is a tool that gets out of your way and lets you focus on what matters: understanding and controlling your money.
-
----
 
 <div align="center">
-
-**Built with ❤️ by someone who hates complicated budgeting app**
 
 [MIT License](LICENSE)
 
