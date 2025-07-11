@@ -74,7 +74,7 @@ Choose your format: PDF reports, CSV data, or Excel spreadsheets. Your budget, y
 
 I built BudgetLink on AWS serverless because your budget shouldn't go down when you need it most. Here's what powers the magic:
 
-**Frontend**: React + TypeScript for a snappy, type-safe experience  
+**Frontend**: React + Javascript for a snappy, type-safe experience  
 **API Layer**: AWS API Gateway handling millions of requests effortlessly  
 **Logic**: Lambda functions that wake up only when needed  
 **Storage**: DynamoDB with single-table design for sub-10ms queries  
@@ -106,7 +106,7 @@ cd infra && terraform init && terraform apply
 
 ```
 BudgetLink/
-├── frontend/           # React app with TypeScript
+├── frontend/           # React app with Javascript
 │   ├── src/components/ # Reusable UI components
 │   ├── src/hooks/      # Custom React hooks
 │   └── src/utils/      # Helper functions
